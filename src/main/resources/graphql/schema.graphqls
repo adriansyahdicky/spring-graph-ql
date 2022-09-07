@@ -1,0 +1,11 @@
+type Query{
+    customers: [Customer]
+}
+
+type Customer{
+    id: Int!
+    name: String!
+    mobilePhone: String!
+    address: String!
+    isActivated: Boolean!
+}
