@@ -1,12 +1,12 @@
 package com.lear.graph.demograph.service;
 
 import com.lear.graph.demograph.domain.Customers;
+import com.lear.graph.demograph.exception.DataNotFoundException;
+import com.lear.graph.demograph.model.CreateCustomerRequest;
 import com.lear.graph.demograph.repository.CustomersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -19,7 +19,7 @@ public class CustomersService {
         this.customersRepository = customersRepository;
     }
 
-    public Iterable<Customers> getAll(){
+    public Iterable<Customers> getCustomers(){
         return customersRepository.findAll();
     }
 
@@ -27,9 +27,20 @@ public class CustomersService {
         Optional<Customers> optionalCustomers =
                 customersRepository.findById(id);
         if(optionalCustomers.isEmpty()){
-            return null;
+            throw  new DataNotFoundException("Data Customer Not Found ", "With ID " + id);
         }
-        System.out.println(optionalCustomers.get());
         return optionalCustomers.get();
+    }
+
+    public Customers createCustomers(CreateCustomerRequest createCustomerRequest){
+        Customers customers =
+                Customers.builder()
+                        .id(createCustomerRequest.getId())
+                        .name(createCustomerRequest.getName())
+                        .address(createCustomerRequest.getAddress())
+                        .mobilePhone(createCustomerRequest.getMobilePhone())
+                        .isActivated(createCustomerRequest.getIsActivated())
+                        .build();
+        return customersRepository.save(customers);
     }
 }

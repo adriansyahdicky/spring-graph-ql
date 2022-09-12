@@ -1,5 +1,6 @@
 type Query{
     customers: [Customer]
+    findCustomerById(id: Int) : Customer
 }
 
 type Customer{
@@ -8,4 +9,16 @@ type Customer{
     mobilePhone: String!
     address: String!
     isActivated: Boolean!
+}
+
+input CreateCustomerRequest{
+    id: Int!
+    name: String!
+    mobilePhone: String!
+    address: String!
+    isActivated: Boolean!
+}
+
+type Mutation {
+    createCustomers(input: CreateCustomerRequest) : Customer!
 }
